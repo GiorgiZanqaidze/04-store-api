@@ -1,11 +1,19 @@
 const mongoose = require('mongoose')
 
-const connectDB = (url) => {
+mongoose.set('strictQuery', true)
+
+const connectDB = (url = '') => {
+  const isProduction = process.env.NODE_ENV === 'production'
+
   return mongoose.connect(url, {
     useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
     useUnifiedTopology: true,
+    useFindAndModify: false,
+    autoIndex: !isProduction,
+    maxPoolSize: 10,
+    poolSize: 10,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
   })
 }
 
